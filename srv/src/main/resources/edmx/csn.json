@@ -1,0 +1,158 @@
+{
+  "namespace": "my.bookshop",
+  "definitions": {
+    "CatalogService": {
+      "kind": "service",
+      "@source": "srv/cat-service.cds"
+    },
+    "CatalogService.Header": {
+      "kind": "entity",
+      "@cds.persistence.name": "CATALOGSERVICE_HEADER",
+      "query": {
+        "SELECT": {
+          "from": {
+            "ref": [
+              "my.bookshop.Header"
+            ]
+          }
+        }
+      },
+      "elements": {
+        "ID": {
+          "@cds.persistence.name": "ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "to_Items": {
+          "@cds.persistence.name": "TO_ITEMS",
+          "type": "cds.Composition",
+          "cardinality": {
+            "max": "*"
+          },
+          "target": "CatalogService.Item",
+          "on": [
+            {
+              "ref": [
+                "to_Items",
+                "header"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "$self"
+              ]
+            }
+          ]
+        }
+      },
+      "$syntax": "projection"
+    },
+    "CatalogService.Item": {
+      "kind": "entity",
+      "@cds.persistence.name": "CATALOGSERVICE_ITEM",
+      "query": {
+        "SELECT": {
+          "from": {
+            "ref": [
+              "my.bookshop.Item"
+            ]
+          }
+        }
+      },
+      "elements": {
+        "ID": {
+          "@cds.persistence.name": "ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "header": {
+          "@cds.persistence.name": "HEADER",
+          "type": "cds.Association",
+          "target": "CatalogService.Header",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ],
+              "$generatedFieldName": "header_ID"
+            }
+          ]
+        },
+        "header_ID": {
+          "@cds.persistence.name": "HEADER_ID",
+          "@odata.foreignKey4": "header",
+          "type": "cds.Integer"
+        }
+      },
+      "$syntax": "projection"
+    },
+    "my.bookshop.Header": {
+      "kind": "entity",
+      "@cds.persistence.name": "MY_BOOKSHOP_HEADER",
+      "elements": {
+        "ID": {
+          "@cds.persistence.name": "ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "to_Items": {
+          "@cds.persistence.name": "TO_ITEMS",
+          "type": "cds.Composition",
+          "cardinality": {
+            "max": "*"
+          },
+          "target": "my.bookshop.Item",
+          "on": [
+            {
+              "ref": [
+                "to_Items",
+                "header"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "$self"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "my.bookshop.Item": {
+      "kind": "entity",
+      "@cds.persistence.name": "MY_BOOKSHOP_ITEM",
+      "elements": {
+        "ID": {
+          "@cds.persistence.name": "ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "header": {
+          "@cds.persistence.name": "HEADER",
+          "type": "cds.Association",
+          "target": "my.bookshop.Header",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ],
+              "$generatedFieldName": "header_ID"
+            }
+          ]
+        },
+        "header_ID": {
+          "@cds.persistence.name": "HEADER_ID",
+          "@odata.foreignKey4": "header",
+          "type": "cds.Integer"
+        }
+      }
+    }
+  },
+  "meta": {
+    "creator": "CDS Compiler v1.21.1"
+  },
+  "$version": "1.0",
+  "@sql_mapping": "plain"
+}

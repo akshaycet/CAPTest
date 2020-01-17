@@ -1,0 +1,6 @@
+applications:
+
+- name: srv
+  memory: 2G
+  path: /srv/target/LearnUI-srv-1.0-SNAPSHOT.war
+  buildpack: sap_java_buildpack

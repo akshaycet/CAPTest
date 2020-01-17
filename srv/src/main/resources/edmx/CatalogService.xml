@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
+  <edmx:DataServices m:DataServiceVersion="2.0">
+    <Schema Namespace="CatalogService" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+      <EntityContainer Name="EntityContainer" m:IsDefaultEntityContainer="true">
+        <EntitySet Name="Header" EntityType="CatalogService.Header"/>
+        <EntitySet Name="Item" EntityType="CatalogService.Item"/>
+        <AssociationSet Name="Item_header" Association="CatalogService.Item_header">
+          <End Role="Item" EntitySet="Item"/>
+          <End Role="Header" EntitySet="Header"/>
+        </AssociationSet>
+      </EntityContainer>
+      <EntityType Name="Header">
+        <Key>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+        <NavigationProperty Name="to_Items" Relationship="CatalogService.Item_header" FromRole="Header" ToRole="Item"/>
+      </EntityType>
+      <EntityType Name="Item">
+        <Key>
+          <PropertyRef Name="ID"/>
+        </Key>
+        <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+        <NavigationProperty Name="header" Relationship="CatalogService.Item_header" FromRole="Item" ToRole="Header"/>
+        <Property Name="header_ID" Type="Edm.Int32"/>
+      </EntityType>
+      <Association Name="Item_header">
+        <End Role="Item" Type="CatalogService.Item" Multiplicity="*">
+          <OnDelete Action="Cascade"/>
+        </End>
+        <End Role="Header" Type="CatalogService.Header" Multiplicity="0..1"/>
+        <ReferentialConstraint>
+          <Principal Role="Header">
+            <PropertyRef Name="ID"/>
+          </Principal>
+          <Dependent Role="Item">
+            <PropertyRef Name="header_ID"/>
+          </Dependent>
+        </ReferentialConstraint>
+      </Association>
+    </Schema>
+  </edmx:DataServices>
+</edmx:Edmx>
